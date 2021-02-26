@@ -126,12 +126,12 @@ def plans(request,package=None):
                         if parent.left != None:
                             left_package = PurchasedPackage.objects.get(user=parent.left)
                             if left_package != None:
-                                left_amount = left_package.investment_package.last().daily_cap_price
+                                left_amount = left_package.investment_package.daily_cap_price
 
                         if parent.right != None:
                             right_package = PurchasedPackage.objects.get(user=parent.right)
                             if right_package != None:
-                                right_amount = left_package.investment_package.last().daily_cap_price
+                                right_amount = left_package.investment_package.daily_cap_price
 
 
                     while(parent!=None and left_amount>0 and right_amount>0):
