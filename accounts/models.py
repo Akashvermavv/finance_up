@@ -73,6 +73,7 @@ class User(AbstractBaseUser):
     position = models.CharField(max_length=25, choices=choice, default='left', )
     email = models.EmailField(max_length=255, unique=True)
     referral_id = models.IntegerField(default=0, null=True, blank=True)
+    placement_id = models.IntegerField(default=0, null=True, blank=True)
     user_id = models.IntegerField(default=0, unique=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
     mobile = PhoneNumberField(blank=False, null=False, max_length=16)

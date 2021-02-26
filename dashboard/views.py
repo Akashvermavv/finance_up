@@ -114,39 +114,45 @@ def plans(request,package=None):
                     b.current_balance = (b.current_balance - amount)
                     b.save()
                     user = request.user
-                    parent = user.parent
-                    left_amount = 0
-                    right_amount = 0
-                    parent_amount = 0
-                    if parent != None:
-                        parent_package = PurchasedPackage.objects.get(user=parent)
+                    parent=user.parent
+                    left_amount=0
+                    right_amount=0
+                    if parent!=None:
+                        parent_balance = balance.objects.get(user=parent)
+                        sponser_amount=(amount*obj.sponsor_bonus_in_per)
+                        parent_balance.current_balance += (sponser_amount)
+                        parent_balance.save()
+                        deposit_history.objects.create(user=request.user.parent, amount=sponser_amount)
                         if parent.left != None:
                             left_package = PurchasedPackage.objects.get(user=parent.left)
                             if left_package != None:
-                                left_amount = left_package.investment_package.daily_cap_price
+                                left_amount = left_package.investment_package.last().daily_cap_price
 
                         if parent.right != None:
                             right_package = PurchasedPackage.objects.get(user=parent.right)
                             if right_package != None:
-                                right_amount = left_package.investment_package.daily_cap_price
+                                right_amount = left_package.investment_package.last().daily_cap_price
+
+
+                    while(parent!=None and left_amount>0 and right_amount>0):
                         parent_amount = 0
-                        if parent_package != None:
-                            if left_amount <= right_amount:
-                                parent_amount = left_amount + (left_amount * parent_package.daily_cap_price)
-                            else:
-                                parent_amount = right_amount + (right_package * parent_package.daily_cap_price)
-                            parent_balance = balance.objects.get(user=parent)
-                            parent_balance.current_balance += (parent_amount)
-                            parent_balance.save()
-                            deposit_history.objects.create(user=request.user.parent, amount=parent_amount)
+                        if left_amount <= right_amount:
+                            parent_amount =  (left_amount * obj.matching_bonus_in_per)
+                        else:
+                            parent_amount =  (right_amount * obj.matching_bonus_in_per)
+                        parent_balance = balance.objects.get(user=parent)
+                        parent_balance.current_balance += (parent_amount)
+                        parent_balance.save()
+                        deposit_history.objects.create(user=request.user.parent, amount=parent_amount)
+                        parent=parent.parent
 
                     superuser = User.objects.filter(admin=True).first()
                     superuser_balance = balance.objects.get(user=superuser)
 
-                    superuser_balance.current_balance += (amount - parent_amount)
+                    superuser_balance.current_balance += (amount)
 
                     superuser_balance.save()
-                    deposit_history.objects.create(user=superuser, amount=amount - parent_amount)
+                    deposit_history.objects.create(user=superuser, amount=amount)
 
                     PurchasedPackage.objects.create(user=request.user, investment_package=obj)
                     messages.success(request, 'Package Successfully Added..')
@@ -177,13 +183,29 @@ def plans(request,package=None):
                     b = balance.objects.get(user=request.user)
                     b.current_balance = (b.current_balance - amount)
                     b.save()
+                    parent=request.user.parent
+                    if parent!=None:
+                        parent_balance = balance.objects.get(user=parent)
+                        sponser_amount = (amount * obj.sponsor_bonus_in_per)
+                        parent_balance.current_balance += (sponser_amount)
+                        parent_balance.save()
+                        deposit_history.objects.create(user=request.user.parent, amount=sponser_amount)
+
+                    superuser = User.objects.filter(admin=True).first()
+                    superuser_balance = balance.objects.get(user=superuser)
+
+                    superuser_balance.current_balance += (amount)
+
+                    superuser_balance.save()
+                    deposit_history.objects.create(user=superuser, amount=amount)
+
                     PurchasedPackage.objects.create(user=request.user, partnership_package=obj)
                     messages.success(request, 'Package Successfully Added..')
                     return redirect('dashboard')
-                    # print('starter package is these')
-                else:
-                    messages.error(request, 'You have insufficient Money for buy Package')
-                    return render(request, 'dashboard/plans.html')
+                # print('starter package is these')
+            else:
+                messages.error(request, 'You have insufficient Money for buy Package')
+                return render(request, 'dashboard/plans.html')
 
         return render(request, 'dashboard/plans.html')
     return render(request, 'dashboard/plans.html', {'package_list': package_list})
