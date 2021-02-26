@@ -73,6 +73,8 @@ class User(AbstractBaseUser):
     position = models.CharField(max_length=25, choices=choice, default='left', )
     email = models.EmailField(max_length=255, unique=True)
     referral_id = models.IntegerField(default=0, null=True, blank=True)
+    placement_id = models.IntegerField(default=0, null=True, blank=True)
+
     user_id = models.IntegerField(default=0, unique=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
     mobile = PhoneNumberField(blank=False, null=False, max_length=16)
@@ -88,6 +90,7 @@ class User(AbstractBaseUser):
     left = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="user_left_child")
     right = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="user_right_child")
     level = models.IntegerField(default=1)
+    investment_carry = models.FloatField(max_length=9, default=0.0)
 
     # confirm = models.BooleanField(default=False)
     # confirmed_date = models.DateTimeField(auto_now_add=True)

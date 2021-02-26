@@ -94,7 +94,7 @@ def plans(request,package=None):
             package_list.append(obj.partnership_package.package)
     if(request.method=='POST'):
         amount = request.POST.get('amount')
-
+        amount_in_float=float(amount)
         print('enter amount is @@',amount)
         try:
             obj = InvestmentPlans.objects.filter(invest_start__lte=amount).last()
@@ -103,6 +103,46 @@ def plans(request,package=None):
             #     print('packkk--',obj.package)
             # obj = obj
             # print('obj pack --',obj.package)
+            user = request.user
+            user.investment_carry+=amount_in_float
+            parent = user.parent
+            left_amount = 0
+            right_amount = 0
+            if parent != None:
+                parent_balance = balance.objects.get(user=parent)
+                sponser_amount = (amount_in_float * obj.sponsor_bonus_in_per)
+                parent_balance.current_balance += (sponser_amount)
+                parent_balance.save()
+                deposit_history.objects.create(user=request.user.parent, amount=sponser_amount)
+                if parent.left != None:
+                        left_amount = parent.left.investment_carry
+
+                if parent.right != None:
+                        right_amount = parent.right.investment_carry
+
+            while (parent != None and left_amount > 0 and right_amount > 0):
+                parent_amount = 0
+                if left_amount <= right_amount:
+                    parent_amount = (left_amount * obj.matching_bonus_in_per)
+                    parent.left.investment_carry-=left_amount
+                    parent.right.investment_carry-=left_amount
+                else:
+                    parent_amount = (right_amount * obj.matching_bonus_in_per)
+                    parent.left.investment_carry -= right_amount
+                    parent.right.investment_carry -= right_amount
+                parent_balance = balance.objects.get(user=parent)
+                parent_balance.current_balance += (parent_amount)
+                parent_balance.save()
+                deposit_history.objects.create(user=request.user.parent, amount=parent_amount)
+                parent = parent.parent
+
+            superuser = User.objects.filter(admin=True).first()
+            superuser_balance = balance.objects.get(user=superuser)
+
+            superuser_balance.current_balance += (amount_in_float)
+
+            superuser_balance.save()
+            deposit_history.objects.create(user=superuser, amount=amount_in_float)
 
             PurchasedPackage.objects.create(user=request.user, investment_package=obj)
             messages.success(request, f'{obj.package} package Successfully Added..')
@@ -113,6 +153,22 @@ def plans(request,package=None):
                 print('exception is --',e)
                 obj = PartnershipPlans.objects.filter(invest_price=amount).first()
                 if(obj):
+                    parent = request.user.parent
+                    if parent != None:
+                        parent_balance = balance.objects.get(user=parent)
+                        sponser_amount = (amount_in_float * obj.sponsor_bonus_in_per)
+                        parent_balance.current_balance += (sponser_amount)
+                        parent_balance.save()
+                        deposit_history.objects.create(user=request.user.parent, amount=sponser_amount)
+
+                    superuser = User.objects.filter(admin=True).first()
+                    superuser_balance = balance.objects.get(user=superuser)
+
+                    superuser_balance.current_balance += (amount_in_float)
+
+                    superuser_balance.save()
+                    deposit_history.objects.create(user=superuser, amount=amount_in_float)
+
                     PurchasedPackage.objects.create(user=request.user, partnership_package=obj)
                     messages.success(request, f'{obj.package} package Successfully Added..')
                     return redirect('purchased_plans')
