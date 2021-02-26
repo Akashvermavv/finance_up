@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="07006b6d-c539-41da-9e71-31bb5d31710a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/activation.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/sass/_global.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/sass/_reset.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/sass/_responsive.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/sass/style.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/css/font-awesome.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/css/owl.carousel.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/css/style.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Sponsor/sponsor01.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Sponsor/sponsor02.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Sponsor/sponsor03.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Sponsor/sponsor04.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Sponsor/sponsor05.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Sponsor/sponsor06.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Stand/build-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Stand/cohesion-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Stand/communication-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Stand/leadership-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/Stand/strategy-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/about.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/banner-one.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/banner-three.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/banner-two.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/binance.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/bitfinex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/bitmex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/bitstamp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/bittrex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/coin1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/computer-robot.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/countryback.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/drive-bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/flags/bangladesh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/flags/canada.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/flags/india.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/flags/malaysia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/flags/singapore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/flags/uae.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/flags/usa.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/footer-shape.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/footer.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/kraken.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/poloniex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/products.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/profit.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/stand.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/team/1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/team/2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/team/3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/team/4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/team/5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/team/6.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/tree1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/tree2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/up-products/Coin Launch.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/up-products/atm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/up-products/blockchain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/up-products/coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/up-products/ecommerce.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/up-products/forex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/up-products/health-gadget.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/img/vision.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/js/jquery.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/js/owl.carousel.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/js/popper.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/js/script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-brands-400.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-brands-400.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-brands-400.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-brands-400.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-brands-400.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-regular-400.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-regular-400.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-regular-400.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-regular-400.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-regular-400.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-solid-900.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-solid-900.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-solid-900.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-solid-900.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/src/webfonts/fa-solid-900.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base/new_css.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base/new_js.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/dashboard/payment_gateway.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/about.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/blog.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/business.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/faq.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/investment.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/investment_plans.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/investor.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/location.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/news.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/payment_method.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/policy.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/pricing_plans.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/success_story.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/support.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/terms.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/other_pages/testimonial.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_perfect_money.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/templates/accounts/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/templates/accounts/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/financeup/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/financeup/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financeup/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/financeup/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financeup/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/financeup/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/other_pages/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/other_pages/contact.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/add_fund.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/add_fund.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/add_premium_plan.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/add_premium_plan.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/binary_tree.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/binary_tree.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/plans.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/plans.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/received_money_history.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/received_money_history.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/send-fund.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/send-fund.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/sendmoney_history.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/sendmoney_history.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/sidebar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard/update-personal-info.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard/update-personal-info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/homepage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/homepage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/emails/verify.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/emails/verify.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/emails/verify.txt" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/emails/verify.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1oQstTw2N1zQWBtX6g7PAisiPHk" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../zips/ARIF" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\free_lancing projects\financeup_project\templates\other_pages" />
+      <recent name="E:\free_lancing projects\financeup_project\promoter\templates\promoter" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\free_lancing projects\financeup_project" />
+      <recent name="E:\free_lancing projects\financeup_project\accounts\templates\accounts" />
+      <recent name="E:\free_lancing projects\financeup_project\templates\other_pages" />
+      <recent name="E:\free_lancing projects\financeup_project\static" />
+      <recent name="E:\free_lancing projects\financeup_project\static\src\img" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.test_perfect_money">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="financeup_project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_perfect_money" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="financeup_project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_perfect_money.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test_perfect_money" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="07006b6d-c539-41da-9e71-31bb5d31710a" name="Default Changelist" comment="" />
+      <created>1613230363278</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1613230363278</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="530" y="181" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1614009149874">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state x="530" y="181" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1600.870@0.0.1600.870" timestamp="1614009149874" />
+    <state x="580" y="189" key="FileChooserDialogImpl" timestamp="1614313684371">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state x="580" y="189" key="FileChooserDialogImpl/0.0.1600.870@0.0.1600.870" timestamp="1614313684371" />
+    <state width="1579" height="218" key="GridCell.Tab.0.bottom" timestamp="1614288884041">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state width="1579" height="218" key="GridCell.Tab.0.bottom/0.0.1600.870@0.0.1600.870" timestamp="1614288884041" />
+    <state width="1579" height="218" key="GridCell.Tab.0.center" timestamp="1614288884041">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state width="1579" height="218" key="GridCell.Tab.0.center/0.0.1600.870@0.0.1600.870" timestamp="1614288884041" />
+    <state width="1579" height="218" key="GridCell.Tab.0.left" timestamp="1614288884041">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state width="1579" height="218" key="GridCell.Tab.0.left/0.0.1600.870@0.0.1600.870" timestamp="1614288884041" />
+    <state width="1579" height="218" key="GridCell.Tab.0.right" timestamp="1614288884041">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state width="1579" height="218" key="GridCell.Tab.0.right/0.0.1600.870@0.0.1600.870" timestamp="1614288884041" />
+    <state x="463" y="182" key="search.everywhere.popup" timestamp="1614089604477">
+      <screen x="0" y="0" width="1600" height="870" />
+    </state>
+    <state x="463" y="182" key="search.everywhere.popup/0.0.1600.870@0.0.1600.870" timestamp="1614089604477" />
+  </component>
+</project>
