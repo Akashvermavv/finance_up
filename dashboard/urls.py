@@ -10,6 +10,7 @@ urlpatterns = [
 	path('add_fund/',views.add_fund,name='add_fund'),
 	path('binary_tree/',views.binary_tree,name='binary_tree'),
 	path('plans/',views.plans,name='plans'),
+	path('purchased_plans/',views.purchased_plans,name='purchased_plans'),
 
 	path('add_premium_plan/',views.add_premium_plan,name='add_premium_plan'),
 	path('premium_plan_success/',views.premium_plan_success,name='premium_plan_success'),

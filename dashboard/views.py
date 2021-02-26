@@ -1,4 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -81,6 +82,9 @@ def binary_tree(request):
     return render(request, 'dashboard/binary_tree.html',{'user_dict':user_dict})
 
 def plans(request,package=None):
+    exist = check_exist_or_not(request)
+    if (not exist):
+        return redirect('add_premium_plan')
     objs = PurchasedPackage.objects.filter(user=request.user)
     package_list = []
     for obj in objs:
@@ -88,105 +92,184 @@ def plans(request,package=None):
             package_list.append(obj.investment_package.package)
         elif (obj.partnership_package):
             package_list.append(obj.partnership_package.package)
+    if(request.method=='POST'):
+        amount = request.POST.get('amount')
 
-    exist = check_exist_or_not(request)
-    if (not exist):
-        return redirect('add_premium_plan')
-    if (request.method == 'POST'):
-        print('package is ####', request.POST['package'])
-        package_type = request.POST.get('package_type')
-        if (package_type == 'investment'):
-            package = request.POST['package']
-            if (request.POST['package']):
-                obj = InvestmentPlans.objects.filter(package=package).first()
-                amount = obj.invest_start
+        print('enter amount is @@',amount)
+        try:
+            obj = InvestmentPlans.objects.filter(invest_start__lte=amount).last()
+            # print('count --',objs.count())
+            # for obj in objs:
+            #     print('packkk--',obj.package)
+            # obj = obj
+            # print('obj pack --',obj.package)
 
-                # b = balance.objects.get(user=request.user)
-                # b.current_balance = (b.current_balance - amount)
-                # b.save()
-                try:
-                    bal = balance.objects.get(user=request.user).current_balance
-                    bal = round(bal, 2)
-                except:
-                    bal = 0
-                if (bal > 0 and bal >= amount):
-                    b = balance.objects.get(user=request.user)
-                    b.current_balance = (b.current_balance - amount)
-                    b.save()
-                    user = request.user
-                    parent = user.parent
-                    left_amount = 0
-                    right_amount = 0
-                    parent_amount = 0
-                    if parent != None:
-                        parent_package = PurchasedPackage.objects.get(user=parent)
-                        if parent.left != None:
-                            left_package = PurchasedPackage.objects.get(user=parent.left)
-                            if left_package != None:
-                                left_amount = left_package.investment_package.daily_cap_price
+            PurchasedPackage.objects.create(user=request.user, investment_package=obj)
+            messages.success(request, f'{obj.package} package Successfully Added..')
+            return redirect('purchased_plans')
 
-                        if parent.right != None:
-                            right_package = PurchasedPackage.objects.get(user=parent.right)
-                            if right_package != None:
-                                right_amount = left_package.investment_package.daily_cap_price
-                        parent_amount = 0
-                        if parent_package != None:
-                            if left_amount <= right_amount:
-                                parent_amount = left_amount + (left_amount * parent_package.daily_cap_price)
-                            else:
-                                parent_amount = right_amount + (right_package * parent_package.daily_cap_price)
-                            parent_balance = balance.objects.get(user=parent)
-                            parent_balance.current_balance += (parent_amount)
-                            parent_balance.save()
-                            deposit_history.objects.create(user=request.user.parent, amount=parent_amount)
-
-                    superuser = User.objects.filter(admin=True).first()
-                    superuser_balance = balance.objects.get(user=superuser)
-
-                    superuser_balance.current_balance += (amount - parent_amount)
-
-                    superuser_balance.save()
-                    deposit_history.objects.create(user=superuser, amount=amount - parent_amount)
-
-                    PurchasedPackage.objects.create(user=request.user, investment_package=obj)
-                    messages.success(request, 'Package Successfully Added..')
-
-                    return redirect('dashboard')
-                    # print('starter package is these')
-                else:
-                    messages.error(request, 'You have insufficient Money for buy Package')
-                    return render(request, 'dashboard/plans.html')
-
-
-
-
-        elif (package_type == 'partnership'):
-            package = request.POST['package']
-            if (request.POST['package']):
-                obj = PartnershipPlans.objects.filter(package=package).first()
-                amount = obj.invest_start
-                # b = balance.objects.get(user=request.user)
-                # b.current_balance = (b.current_balance - amount)
-                # b.save()
-                try:
-                    bal = balance.objects.get(user=request.user).current_balance
-                    bal = round(bal, 2)
-                except:
-                    bal = 0
-                if (bal > 0 and bal >= amount):
-                    b = balance.objects.get(user=request.user)
-                    b.current_balance = (b.current_balance - amount)
-                    b.save()
+        except Exception as e:
+            try:
+                print('exception is --',e)
+                obj = PartnershipPlans.objects.filter(invest_price=amount).first()
+                if(obj):
                     PurchasedPackage.objects.create(user=request.user, partnership_package=obj)
-                    messages.success(request, 'Package Successfully Added..')
-                    return redirect('dashboard')
-                    # print('starter package is these')
-                else:
-                    messages.error(request, 'You have insufficient Money for buy Package')
+                    messages.success(request, f'{obj.package} package Successfully Added..')
+                    return redirect('purchased_plans')
+
+                amount = obj.invest_price
+
+                b = balance.objects.get(user=request.user)
+                # b.current_balance = (b.current_balance - amount)
+                # b.save()
+            except:
+                messages.error(request, 'Sorry Something went wrong .. ')
+                return render(request, 'dashboard/plans.html')
+
+
+            try:
+                bal = balance.objects.get(user=request.user).current_balance
+                bal = round(bal, 2)
+            except:
+                bal = 0
+            print('available balance --', bal, 'and invest start bal --', amount)
+            if (bal > 0 and bal >= amount ):
+                b = balance.objects.get(user=request.user)
+                try:
+                    b.current_balance = (b.current_balance - amount)
+                    b.save()
+                except:
+                    messages.error(request, 'You have not balance account for buy Package')
                     return render(request, 'dashboard/plans.html')
 
-        return render(request, 'dashboard/plans.html')
-    return render(request, 'dashboard/plans.html', {'package_list': package_list})
+            else:
+                messages.error(request, 'You have insufficient Money for buy Package')
+                return render(request, 'dashboard/plans.html')
+
+
+        return render(request, 'dashboard/plans.html', {'package_list': package_list})
+    else:
+        return render(request, 'dashboard/plans.html', {'package_list': package_list})
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #
+    # exist = check_exist_or_not(request)
+    # if (not exist):
+    #     return redirect('add_premium_plan')
+    # if (request.method == 'POST'):
+    #     print('package is ####', request.POST['package'])
+    #     package_type = request.POST.get('package_type')
+    #     if (package_type == 'investment'):
+    #         package = request.POST['package']
+    #         if (request.POST['package']):
+    #             print('package is @@@',package)
+    #             obj = InvestmentPlans.objects.filter(package=package).first()
+    #             try:
+    #                 amount = obj.invest_start
+    #                 end_amount = obj.invest_end
+    #             except:
+    #                 amount=0
+    #                 end_amount=0
+
+                # b = balance.objects.get(user=request.user)
+                # b.current_balance = (b.current_balance - amount)
+                # b.save()
+    #
+    #             try:
+    #                 bal = balance.objects.get(user=request.user).current_balance
+    #                 bal = round(bal, 2)
+    #             except:
+    #                 bal = 0
+    #             print('available balance --', bal, 'and invest start bal --', amount)
+    #             if (bal > 0 and bal >= amount ):
+    #                 b = balance.objects.get(user=request.user)
+    #                 b.current_balance = (b.current_balance - amount)
+    #                 b.save()
+    #                 user = request.user
+    #                 parent = user.parent
+    #                 left_amount = 0
+    #                 right_amount = 0
+    #                 parent_amount = 0
+    #                 if parent != None:
+    #                     parent_package = PurchasedPackage.objects.get(user=parent)
+    #                     if parent.left != None:
+    #                         left_package = PurchasedPackage.objects.get(user=parent.left)
+    #                         if left_package != None:
+    #                             left_amount = left_package.investment_package.daily_cap_price
+    #
+    #                     if parent.right != None:
+    #                         right_package = PurchasedPackage.objects.get(user=parent.right)
+    #                         if right_package != None:
+    #                             right_amount = left_package.investment_package.daily_cap_price
+    #                     parent_amount = 0
+    #                     if parent_package != None:
+    #                         if left_amount <= right_amount:
+    #                             parent_amount = left_amount + (left_amount * parent_package.daily_cap_price)
+    #                         else:
+    #                             parent_amount = right_amount + (right_package * parent_package.daily_cap_price)
+    #                         parent_balance = balance.objects.get(user=parent)
+    #                         parent_balance.current_balance += (parent_amount)
+    #                         parent_balance.save()
+    #                         deposit_history.objects.create(user=request.user.parent, amount=parent_amount)
+    #
+    #                 superuser = User.objects.filter(admin=True).first()
+    #                 superuser_balance = balance.objects.get(user=superuser)
+    #
+    #                 superuser_balance.current_balance += (amount - parent_amount)
+    #
+    #                 superuser_balance.save()
+    #                 deposit_history.objects.create(user=superuser, amount=amount - parent_amount)
+    #
+    #                 PurchasedPackage.objects.create(user=request.user, investment_package=obj)
+    #                 messages.success(request, 'Package Successfully Added..')
+    #
+    #                 return redirect('dashboard')
+    #                 # print('starter package is these')
+    #             else:
+    #                 messages.error(request, 'You have insufficient Money for buy Package')
+    #                 return render(request, 'dashboard/plans.html')
+    #
+    #
+    #
+    #
+    #     elif (package_type == 'partnership'):
+    #         package = request.POST['package']
+    #         if (request.POST['package']):
+    #             obj = PartnershipPlans.objects.filter(package=package).first()
+    #             amount = obj.invest_price
+    #             # b = balance.objects.get(user=request.user)
+    #             # b.current_balance = (b.current_balance - amount)
+    #             # b.save()
+    #             try:
+    #                 bal = balance.objects.get(user=request.user).current_balance
+    #                 bal = round(bal, 2)
+    #             except:
+    #                 bal = 0
+    #             if (bal > 0 and bal >= amount):
+    #                 b = balance.objects.get(user=request.user)
+    #                 b.current_balance = (b.current_balance - amount)
+    #                 b.save()
+    #                 PurchasedPackage.objects.create(user=request.user, partnership_package=obj)
+    #                 messages.success(request, 'Package Successfully Added..')
+    #                 return redirect('dashboard')
+    #                 # print('starter package is these')
+    #             else:
+    #                 messages.error(request, 'You have insufficient Money for buy Package')
+    #                 return render(request, 'dashboard/plans.html')
+    #
+    #     return render(request, 'dashboard/plans.html')
+    # return render(request, 'dashboard/plans.html', {'package_list': package_list})
 
 
 
@@ -260,6 +343,16 @@ def plans(request,package=None):
     #     return render(request, 'dashboard/plans.html')
     # return render(request, 'dashboard/plans.html',{'package_list':package_list})
 
+
+def purchased_plans(request):
+    objs = PurchasedPackage.objects.filter(user=request.user)
+    package_list = []
+    for obj in objs:
+        if (obj.investment_package):
+            package_list.append(obj.investment_package.package)
+        elif (obj.partnership_package):
+            package_list.append(obj.partnership_package.package)
+    return render(request,'dashboard/purchased_plans.html',{'package_list':package_list})
 
 def test(request):
     return render(request, 'accounts/activation.html')

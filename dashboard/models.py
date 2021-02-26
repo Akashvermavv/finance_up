@@ -194,7 +194,7 @@ choices = (
     ('silver','Silver'),
     ('gold','Gold'),
     ('platinum','Platinum'),
-    ('platinum diamond titanium','Platinum Diamond Titanium'),
+    ('titanium','Titanium'),
     ('diamond','Diamond'),
     ('vip','VIP'),
 
