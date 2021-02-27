@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.http import HttpRequest
 from django.contrib import messages
 from datetime import datetime, timedelta
@@ -16,10 +16,47 @@ from .models import *
 from accounts.models import User
 from accounts.forms import UserDetailChangeForm
 from django.views import generic
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+
 
 def test(request):
 	return  render(request,'accounts/activation.html')
+
+
+def dfs(visited, node):
+    if node not in visited:
+        print (node)
+        visited.add(node)
+        if node.left ==None or node.right==None:
+            return node.investment_carry
+        left_amount=dfs(visited, node.left)
+        right_amount=dfs(visited, node.right)
+        total_amount=left_amount+right_amount
+        if left_amount <= right_amount:
+            obj=InvestmentPlans.objects.filter(invest_start__lte=left_amount).last()
+            parent_amount = (left_amount * (obj.matching_bonus_in_per/100))
+            node.left.investment_carry -= left_amount
+            node.left.save()
+            node.right.investment_carry -= left_amount
+            node.right.save()
+        else:
+            obj=InvestmentPlans.objects.filter(invest_start__lte=right_amount).last()
+            parent_amount = (right_amount * (obj.matching_bonus_in_per/100))
+            node.left.investment_carry -= right_amount
+            node.left.save()
+            node.right.investment_carry -= right_amount
+            node.right.save()
+        parent_balance = balance.objects.get(user=node)
+        parent_balance.current_balance += (parent_amount)
+        parent_balance.save()
+        deposit_history.objects.create(user=node, amount=parent_amount)
+    return total_amount
+
+
+def dfs_matching(request):
+    visited=set()
+    result=dfs(visited,request.user)
+    return  HttpResponseRedirect(reverse('dashboard'))
 
 
 @login_required
@@ -105,36 +142,16 @@ def plans(request,package=None):
             # print('obj pack --',obj.package)
             user = request.user
             user.investment_carry+=amount_in_float
+            user.save()
             parent = user.parent
             left_amount = 0
             right_amount = 0
             if parent != None:
                 parent_balance = balance.objects.get(user=parent)
-                sponser_amount = (amount_in_float * obj.sponsor_bonus_in_per)
+                sponser_amount = (amount_in_float * (obj.sponsor_bonus_in_per/100))
                 parent_balance.current_balance += (sponser_amount)
                 parent_balance.save()
                 deposit_history.objects.create(user=request.user.parent, amount=sponser_amount)
-                if parent.left != None:
-                        left_amount = parent.left.investment_carry
-
-                if parent.right != None:
-                        right_amount = parent.right.investment_carry
-
-            while (parent != None and left_amount > 0 and right_amount > 0):
-                parent_amount = 0
-                if left_amount <= right_amount:
-                    parent_amount = (left_amount * obj.matching_bonus_in_per)
-                    parent.left.investment_carry-=left_amount
-                    parent.right.investment_carry-=left_amount
-                else:
-                    parent_amount = (right_amount * obj.matching_bonus_in_per)
-                    parent.left.investment_carry -= right_amount
-                    parent.right.investment_carry -= right_amount
-                parent_balance = balance.objects.get(user=parent)
-                parent_balance.current_balance += (parent_amount)
-                parent_balance.save()
-                deposit_history.objects.create(user=request.user.parent, amount=parent_amount)
-                parent = parent.parent
 
             superuser = User.objects.filter(admin=True).first()
             superuser_balance = balance.objects.get(user=superuser)
@@ -156,7 +173,7 @@ def plans(request,package=None):
                     parent = request.user.parent
                     if parent != None:
                         parent_balance = balance.objects.get(user=parent)
-                        sponser_amount = (amount_in_float * obj.sponsor_bonus_in_per)
+                        sponser_amount = (amount_in_float * (obj.sponsor_bonus_in_per/100))
                         parent_balance.current_balance += (sponser_amount)
                         parent_balance.save()
                         deposit_history.objects.create(user=request.user.parent, amount=sponser_amount)

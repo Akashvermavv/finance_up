@@ -25,12 +25,15 @@ class UserAdmin(BaseUserAdmin):
         ('Personal info', {'fields': (
                                 'first_name',
                                 'last_name',
-                                'user_id','referral_id',
+                                'user_id','referral_id','placement_id',
 
                                 'mobile',
                                 'address',
                                 'country',
-
+                                'parent',
+                                'left',
+                                'right',
+                                'investment_carry',
 
                                       'image')}),
 

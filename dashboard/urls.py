@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
 	path('',views.dashboard,name='dashboard'),
 	path('test',views.test,name='test'),
+	path('dfs_matching/',views.dfs_matching,name='dfs_matching'),
 	path('add_fund/',views.add_fund,name='add_fund'),
 	path('binary_tree/',views.binary_tree,name='binary_tree'),
 	path('plans/',views.plans,name='plans'),
