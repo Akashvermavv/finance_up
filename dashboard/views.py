@@ -112,22 +112,30 @@ def bfs(visited,queue, node):
         right=parent.right
         visited.append(parent)
         if left==None:
-            user_dict[level+1].append(None)
+            user_dict[level].append(None)
         else :
-            user_dict[level + 1].append(left)
+            user_dict[level ].append(left)
+            queue.append(left)
         if right==None:
-            user_dict[level+1].append(None)
+            user_dict[level].append(None)
         else:
-            user_dict[level+1].append(right)
+            user_dict[level].append(right)
 
+    # level_power=1
+    # for key,value in user_dict.items():
+    #     check=2**level_power
+    #     level_power+=1
+    #     if len(user_dict[key])<check:
+    #         for x in range(check-len(user_dict[key])):
+    #             user_dict[key].append(None)
+    return user_dict
 
 def binary_tree(request):
     exist = check_exist_or_not(request)
     if (not exist):
         return redirect('add_premium_plan')
     user_dict = bfs([], [], request.user)
-    user_dict[request.user.level] = []
-    user_dict[request.user.level].append(request.user)
+
     return render(request, 'dashboard/binary_tree.html', {'user_dict': user_dict})
 
 
