@@ -87,6 +87,27 @@ def add_premium_plan(request):
 					  {'user_id': user_id, 'order_number': order_number, 'activate': activate,'exist':exist})
 
 
+def bfs(visited,queue, node):
+    visited.append(node)
+    queue.append(node)
+    user_dict = {}
+    while queue:
+        parent = queue.pop(0)
+        level=(parent.level)+1
+        if level not in user_dict:
+            user_dict[level]=[]
+        left=parent.left
+        right=parent.right
+        visited.append(parent)
+        if left==None:
+            user_dict[level+1].append(None)
+        else :
+            user_dict[level + 1].append(left)
+        if right==None:
+            user_dict[level+1].append(None)
+        else:
+            user_dict[level+1].append(right)
+
 
 
 
@@ -103,19 +124,9 @@ def binary_tree(request):
     exist = check_exist_or_not(request)
     if (not exist):
         return redirect('add_premium_plan')
-    users=User.objects.all()
-    user_dict={}
-    for user in users:
-        level=((user.level)+1)*2
-        if level not in user_dict:
-            user_dict[level]=[]
-        user_dict[level].append(user)
-    for key in user_dict:
-        if len(user_dict[key])<key:
-            for i in range(0,(key-len(user_dict))+1):
-                user_dict[key].append(None)
-    print(user_dict)
-
+    user_dict=bfs([],[],request.user)
+    user_dict[request.user.level]=[]
+    user_dict[request.user.level].append(request.user)
     return render(request, 'dashboard/binary_tree.html',{'user_dict':user_dict})
 
 def plans(request,package=None):
