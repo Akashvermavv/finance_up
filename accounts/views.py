@@ -199,7 +199,7 @@ def register_page(request):
         # print('post data --',request.POST)
         # print('post data --',request.FILES)
         # print('form1 user --', form_1.user)
-        print('form is valid or not --',form.is_valid())
+        # print('form is valid or not --',form.is_valid())
         if form.is_valid():
             import requests
             response = request.POST['g-recaptcha-response']
@@ -234,7 +234,8 @@ def register_page(request):
                 'form': form,
 
             }
-            messages.error(request,form.errors)
+            print('form erros ###',form.errors)
+            messages.error(request,'Please provide a valid referral id or placement id')
             return render(request, "accounts/register.html",context)
 
 

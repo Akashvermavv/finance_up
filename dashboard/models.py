@@ -248,11 +248,18 @@ class PurchasedPackage(models.Model):
     partnership_package = models.ForeignKey(PartnershipPlans,on_delete=models.CASCADE,null=True,blank=True)
     package_start       =models.DateField(auto_now_add=True)
     end_package         = models.DateField(null=False,blank=False)
-    last_benefit_date   = models.DateField(null=True,blank=True,default=timezone.now().date())
+    last_benefit_date   = models.DateField(null=True,blank=True,default=timezone.now())
     invest_amount = models.BigIntegerField()
 
     def __str__(self):
         return str(self.user.email)
+
+
+class AllUserNotice(models.Model):
+    notice = models.TextField(max_length=1500)
+
+    def __str__(self):
+        return str(self.notice)[:20]
 
 
 

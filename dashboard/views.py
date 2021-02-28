@@ -99,24 +99,56 @@ def add_premium_plan(request):
 #     return render(request, 'dashboard/binary_tree.html')
 
 
+def bfs(visited,queue, node):
+    visited.append(node)
+    queue.append(node)
+    user_dict = {}
+    while queue:
+        parent = queue.pop(0)
+        level=(parent.level)+1
+        if level not in user_dict:
+            user_dict[level]=[]
+        left=parent.left
+        right=parent.right
+        visited.append(parent)
+        if left==None:
+            user_dict[level+1].append(None)
+        else :
+            user_dict[level + 1].append(left)
+        if right==None:
+            user_dict[level+1].append(None)
+        else:
+            user_dict[level+1].append(right)
+
+
 def binary_tree(request):
     exist = check_exist_or_not(request)
     if (not exist):
         return redirect('add_premium_plan')
-    users=User.objects.all()
-    user_dict={}
-    for user in users:
-        level=((user.level)+1)*2
-        if level not in user_dict:
-            user_dict[level]=[]
-        user_dict[level].append(user)
-    for key in user_dict:
-        if len(user_dict[key])<key:
-            for i in range(0,(key-len(user_dict))+1):
-                user_dict[key].append(None)
-    print(user_dict)
+    user_dict = bfs([], [], request.user)
+    user_dict[request.user.level] = []
+    user_dict[request.user.level].append(request.user)
+    return render(request, 'dashboard/binary_tree.html', {'user_dict': user_dict})
 
-    return render(request, 'dashboard/binary_tree.html',{'user_dict':user_dict})
+
+
+    # exist = check_exist_or_not(request)
+    # if (not exist):
+    #     return redirect('add_premium_plan')
+    # users=User.objects.all()
+    # user_dict={}
+    # for user in users:
+    #     level=((user.level)+1)*2
+    #     if level not in user_dict:
+    #         user_dict[level]=[]
+    #     user_dict[level].append(user)
+    # for key in user_dict:
+    #     if len(user_dict[key])<key:
+    #         for i in range(0,(key-len(user_dict))+1):
+    #             user_dict[key].append(None)
+    # print(user_dict)
+    #
+    # return render(request, 'dashboard/binary_tree.html',{'user_dict':user_dict})
 
 def plans(request,package=None):
 
@@ -559,13 +591,17 @@ def plans(request,package=None):
 
 def purchased_plans(request):
     objs = PurchasedPackage.objects.filter(user=request.user)
-    package_list = []
+    package_list_investment = []
+    package_list_partnership = []
     for obj in objs:
         if (obj.investment_package):
-            package_list.append(obj.investment_package.package)
+            package_list_investment.append(obj.investment_package.package)
         elif (obj.partnership_package):
-            package_list.append(obj.partnership_package.package)
-    return render(request,'dashboard/purchased_plans.html',{'package_list':package_list})
+            package_list_partnership.append(obj.partnership_package.package)
+    return render(request,'dashboard/purchased_plans.html',{
+        'package_list_investment':package_list_investment,
+        'package_list_partnership':package_list_partnership,
+                                                            })
 
 def test(request):
     return render(request, 'accounts/activation.html')
@@ -586,6 +622,26 @@ def check_exist_or_not(request):
 
 @login_required(login_url='/login/')
 def dashboard(request):
+    msg = AllUserNotice.objects.first().notice
+
+    total_withdraw_amount = 0
+    total_deposit_amount = 0
+    all_withdraw_data = withdraw_requests.objects.filter(user=request.user)
+
+    for req in all_withdraw_data:
+        total_withdraw_amount += req.amount
+    all_deposit_data = deposit_history.objects.filter(user=request.user)
+
+    for req in all_deposit_data:
+        total_deposit_amount += req.amount
+
+
+
+
+
+    all_withdraw_data = User.objects.filter(referral_id=request.user.referral_id)
+    all_withdraw_data = all_withdraw_data.exclude(email=request.user.email)
+    refer_count = all_withdraw_data.count()
     objs = PurchasedPackage.objects.filter(user=request.user)
     package_list = []
     for obj in objs:
@@ -680,7 +736,9 @@ def dashboard(request):
         twithdraw = 0
     return render(request, 'dashboard/dashboard.html',
                   {'balance': bal, 'active_adpacks': total_active_adpacks, 'total_referal': total_referal,
-                   'total_withdraw': twithdraw, })
+                   'total_withdraw': total_withdraw_amount,
+                   'total_deposit': total_deposit_amount,
+                   'refer_count':refer_count ,'msg':msg})
 
 
 
