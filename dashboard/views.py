@@ -98,44 +98,81 @@ def add_premium_plan(request):
 #         return redirect('add_premium_plan')
 #     return render(request, 'dashboard/binary_tree.html')
 
-def bfs(visited,queue, node):
-    visited.append(node)
-    queue.append(node)
-    user_dict = {}
-    while queue:
-        parent = queue.pop(0)
-        level=(parent.level)+1
-        if level not in user_dict:
-            user_dict[level]=[]
-        left=parent.left
-        right=parent.right
-        visited.append(parent)
-        if left==None:
-            user_dict[level].append(None)
-        else :
-            user_dict[level ].append(left)
-            queue.append(left)
-        if right==None:
-            user_dict[level].append(None)
-        else:
-            user_dict[level].append(right)
+# def bfs(visited,queue, node,html_code,level):
+#     visited.append(node)
+#     queue.append(node)
+#     user_dict = {}
+#     if level==1:
+#         level_str='first'
+#     elif level==2:
+#         level_str='second'
+#     elif:
+#         level_str='last'
+#     else:
+#         return
+#     while queue:
+#         parent = queue.pop(0)
+#         html_code+="""<ul>
+#                             <li class="tree-%s-user">
+#                                 <a href="%s">%s</a>
+#                         """%(level_str,url,parent.email)
+#         left=parent.left
+#         right=parent.right
+#         visited.append(parent)
+#         if left==None:
+#             html_code+="</li>"
+#         else :
+#             html_code+=""
+#             queue.append(left)
+#         if right==None:
+#             user_dict[level].append(None)
+#         else:
+#             user_dict[level].append(right)
+#
+#     # level_power=1
+#     # for key,value in user_dict.items():
+#     #     check=2**level_power
+#     #     level_power+=1
+#     #     if len(user_dict[key])<check:
+#     #         for x in range(check-len(user_dict[key])):
+#     #             user_dict[key].append(None)
+#     return user_dict
 
-    # level_power=1
-    # for key,value in user_dict.items():
-    #     check=2**level_power
-    #     level_power+=1
-    #     if len(user_dict[key])<check:
-    #         for x in range(check-len(user_dict[key])):
-    #             user_dict[key].append(None)
-    return user_dict
+def dfs_tree(visited, node,html_code,level):
+    if node not in visited and level<4:
+        print (node)
+        if level==1:
+            level_str="first"
+        if level==2:
+            level_str="second"
+        if level==3:
+            level_str="third"
+        url="#"
+
+        if node==None:
+            html_code += """<li class="tree-%s-user">
+                                    <a href="%s">%s</a>""" % (level_str, url, "None")
+            return html_code
+        visited.add(node)
+        left=node.left
+        right=node.right
+        html_code += """<li class="tree-%s-user">
+                        <a href="%s">%s</a> <ul>""" % (level_str, url, node.email)
+
+        html_code=dfs_tree(visited,left,html_code,level+1)
+        html_code += "</li>"
+        html_code=dfs_tree(visited,right,html_code,level+1)
+        html_code += "</li>"
+        html_code+="</ul>"
+    return html_code
 
 def binary_tree(request):
     exist = check_exist_or_not(request)
     if (not exist):
         return redirect('add_premium_plan')
-    user_dict = bfs([], [], request.user)
+    html_code = dfs_tree(set(), request.user, "<ul>",1)
 
-    return render(request, 'dashboard/binary_tree.html', {'user_dict': user_dict})
+    return render(request, 'dashboard/binary_tree.html', {'html_code': html_code})
 
 def plans(request,package=None):
 
