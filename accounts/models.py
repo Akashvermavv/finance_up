@@ -86,9 +86,9 @@ class User(AbstractBaseUser):
     admin = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='profile_images', blank=True)
-    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="user_parent")
-    left = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="user_left_child")
-    right = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="user_right_child")
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="user_parent")
+    left = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="user_left_child")
+    right = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="user_right_child")
     level = models.IntegerField(default=1)
     investment_carry = models.FloatField(max_length=9, default=0.0)
 

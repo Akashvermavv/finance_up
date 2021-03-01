@@ -35,6 +35,7 @@ urlpatterns = [
 	path('agent_account_add/',views.agent_account_add,name='agent_account_add'),
 	path('bank_info_add/',views.bank_info_add,name='bank_info_add'),
 	path('withdraw/',views.withdraw,name='withdraw'),
+	path('franchise_withdraw/',views.franchise_withdraw,name='franchise_withdraw'),
 	path('withdraw_request/',views.withdraw_request,name='withdraw_request'),
 	path('withdraw_request_premium/',views.withdraw_request_premium,name='withdraw_request_premium'),
 	path('change_password/',views.change_password,name='change_password'),

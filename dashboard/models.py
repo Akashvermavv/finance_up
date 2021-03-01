@@ -248,7 +248,7 @@ class PurchasedPackage(models.Model):
     partnership_package = models.ForeignKey(PartnershipPlans,on_delete=models.CASCADE,null=True,blank=True)
     package_start       =models.DateField(auto_now_add=True)
     end_package         = models.DateField(null=False,blank=False)
-    last_benefit_date   = models.DateField(null=True,blank=True,default=timezone.now())
+    last_benefit_date   = models.DateField(null=True,blank=True,default=timezone.now)
     invest_amount = models.BigIntegerField()
 
     def __str__(self):
@@ -263,6 +263,13 @@ class AllUserNotice(models.Model):
 
 
 
+class FranchiseWithdraw(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    flag  = models.BooleanField(default=False)
+    amount  = models.BigIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user)
 
 
 
