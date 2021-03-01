@@ -160,6 +160,9 @@ class LoginView(NextUrlMixin,RequestFormAttachMixin,FormView):
 
     def form_valid(self, form):
         next_path = self.get_next_url()
+        request = self.request
+        if (request.user.staff == True  and request.user.is_active == True):
+            return redirect('admin_dashboard')
         return redirect('dashboard')
 
     success_message = 'Welcome to the dashboard'
@@ -191,6 +194,7 @@ class UserDetailUpdateView(LoginRequiredMixin,UpdateView):
 # User = get_user_model()
 def register_page(request):
     print('in register page method is ',request.method)
+    form = RegisterForm()
     if request.method=='POST':
         form =RegisterForm(request.POST,request.FILES or None)
         # form_1 = UserProfileForm(request.POST, request.FILES)
@@ -228,14 +232,14 @@ def register_page(request):
             return render(request, 'accounts/activation.html')
             # return redirect('login')
         else:
-            form = RegisterForm()
+
 
             context = {
                 'form': form,
 
             }
             print('form erros ###',form.errors)
-            messages.error(request,'Please provide a valid referral id or placement id')
+            # messages.error(request,'Please provide a valid referral id or placement id')
             return render(request, "accounts/register.html",context)
 
 

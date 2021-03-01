@@ -15,12 +15,28 @@ from .models import *
 # from accounts.models import User
 from accounts.models import User
 from accounts.forms import UserDetailChangeForm
+from .forms import AllUserNoticeForm
 from django.views import generic
 from django.urls import reverse_lazy, reverse
 
 
 def test(request):
 	return  render(request,'accounts/activation.html')
+
+
+def all_user_notice(request):
+    if(request.method=='POST'):
+        form = AllUserNoticeForm(request.POST)
+        if form.is_valid():
+            messages.success(request,'All users notice add successfully')
+            form.save()
+
+
+
+    form = AllUserNoticeForm()
+    return render(request,'dashboard/admin_notice.html',{'form':form})
+
+
 
 
 def dfs(visited, node):
@@ -57,6 +73,113 @@ def dfs_matching(request):
     visited=set()
     result=dfs(visited,request.user)
     return  HttpResponseRedirect(reverse('dashboard'))
+
+
+
+def ban_user(request):
+    print('in ban user method is ',request.method)
+    id = None
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
+    if(request.method=='POST'):
+
+        id = request.POST.get('id',None)
+        print('id $$$$',id)
+        try:
+            if(request.user.admin):
+                obj  = User.objects.get(id=id)
+                obj.ban=True
+                obj.save()
+                messages.info(request, 'User ban successfully')
+        except:
+            pass
+
+
+
+
+    all_users = User.objects.all().exclude(email=request.user.email)
+    print('all users data --', all_users)
+
+    if len(all_users) == 0:
+        return render(request, 'dashboard/sendmoney_history.html',
+                      {'message': 'you dont have user  record', })
+    users_data = []
+    for req in all_users:
+        name = str(req.first_name) + ' ' + str(req.last_name)
+        email = req.email
+        country = req.country
+        ban = req.ban
+        obj = req
+        print('users data @@', users_data)
+        users_data.append({'name': name, 'email': email,'ban':ban, 'country': country.name, 'id':req.id})
+    print('all users data --', users_data)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(users_data, 10)
+
+    try:
+        hist = paginator.page(page)
+    except PageNotAnInteger:
+        hist = paginator.page(1)
+    except EmptyPage:
+        hist = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/manage_users.html', {'history': hist, })
+
+
+
+
+def unban_user(request):
+    print('in unban user method is ',request.method)
+    id = None
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
+    if(request.method=='POST'):
+
+        id = request.POST.get('id',None)
+        print('id $$$$',id)
+        try:
+            if(request.user.admin):
+                obj  = User.objects.get(id=id)
+                obj.ban=False
+                obj.save()
+                messages.info(request, 'User unban successfully')
+        except:
+            pass
+
+
+
+
+    all_users = User.objects.all().exclude(email=request.user.email)
+    print('all users data --', all_users)
+
+    if len(all_users) == 0:
+        return render(request, 'dashboard/sendmoney_history.html',
+                      {'message': 'you dont have user  record', })
+    users_data = []
+    for req in all_users:
+        name = str(req.first_name) + ' ' + str(req.last_name)
+        email = req.email
+        country = req.country
+        ban = req.ban
+        obj = req
+        print('users data @@', users_data)
+        users_data.append({'name': name, 'email': email,'ban':ban, 'country': country.name, 'id':req.id})
+    print('all users data --', users_data)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(users_data, 10)
+
+    try:
+        hist = paginator.page(page)
+    except PageNotAnInteger:
+        hist = paginator.page(1)
+    except EmptyPage:
+        hist = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/manage_users.html', {'history': hist, })
 
 
 @login_required
@@ -603,24 +726,240 @@ def check_exist_or_not(request):
             exist = True
     return exist
 
+@login_required(login_url='/login/')
+def admin_dashboard(request):
+    if(not (request.user.staff==True and request.user.admin==True and request.user.is_active==True )):
+        messages.error(request,'You have admin access')
+        return render(request,'accounts/login.html',)
+
+    return render(request,'dashboard/admin_dashboard.html',{})
+
+
+@login_required(login_url='/login/')
+def manage_user(request):
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
+    all_users = User.objects.all().exclude(email=request.user.email)
+    print('all users data --',all_users)
+
+    if len(all_users) == 0:
+        return render(request, 'dashboard/sendmoney_history.html',
+                      {'message': 'you dont have user  record', })
+    users_data = []
+    for req in all_users:
+        name = str(req.first_name)+' '+str(req.last_name)
+        email = req.email
+        country = req.country
+        obj = req
+        print('users data @@ id  ',users_data,req.id)
+        users_data.append({'name': name, 'email': email, 'country': country.name,'id':req.id})
+    print('all users data --', users_data)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(users_data, 10)
+
+    try:
+        hist = paginator.page(page)
+    except PageNotAnInteger:
+        hist = paginator.page(1)
+    except EmptyPage:
+        hist = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/manage_users.html',  {'history': hist, })
+
+
+
+
 
 
 
 
 @login_required(login_url='/login/')
-def dashboard(request):
-    msg = AllUserNotice.objects.first().notice
+def franchise_request(request):
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
+    if(request.method=='POST'):
+        id = request.POST.get('id',None)
+        action = request.POST.get('action',None)
 
-    total_withdraw_amount = 0
-    total_deposit_amount = 0
+        if(id and action):
+            if(action=='approve'):
+                obj = FranchiseWithdraw.objects.get(id=id)
+                obj.payment_pending=False
+                obj.payment_approved=True
+                obj.payment_rejected=False
+                obj.save()
+            elif(action=='reject'):
+                obj = FranchiseWithdraw.objects.get(id=id)
+                obj.payment_pending = False
+                obj.payment_approved = False
+                obj.payment_rejected = True
+                obj.save()
+
+
+
+
+
+
+    all_users = FranchiseWithdraw.objects.filter(payment_pending=True).exclude(user__email=request.user.email)
+    print('all users data --',all_users)
+
+    if len(all_users) == 0:
+        return render(request, 'dashboard/franchise_request.html',
+                      {'message': 'you dont have user  record', })
+    users_data = []
+    for req in all_users:
+        name = str(req.user.first_name)+' '+str(req.user.last_name)
+        email = req.user.email
+        country = req.user.country
+        pending = req.payment_pending
+        obj = req
+        # print('users data @@ id  ',users_data,req.id)
+        users_data.append({'name': name, 'email': email, 'country': country.name,'id':req.id,'pending':pending})
+    print('all users data --', users_data)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(users_data, 10)
+
+    try:
+        hist = paginator.page(page)
+    except PageNotAnInteger:
+        hist = paginator.page(1)
+    except EmptyPage:
+        hist = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/franchise_request.html',  {'history': hist, })
+
+@login_required(login_url='/login/')
+def franchise_request_rejected(request):
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
+    all_users = FranchiseWithdraw.objects.filter(payment_pending=False,payment_approved=False,payment_rejected=True).exclude(user__email=request.user.email)
+    print('all users data --',all_users)
+
+    if len(all_users) == 0:
+        return render(request, 'dashboard/franchise_request_rejected.html',
+                      {'message': 'you dont have user  record', })
+    users_data = []
+    for req in all_users:
+        name = str(req.user.first_name)+' '+str(req.user.last_name)
+        email = req.user.email
+        country = req.user.country
+        pending = req.payment_pending
+        obj = req
+        # print('users data @@ id  ',users_data,req.id)
+        users_data.append({'name': name, 'email': email, 'country': country.name,'id':req.user.id,'pending':pending})
+    print('all users data --', users_data)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(users_data, 10)
+
+    try:
+        hist = paginator.page(page)
+    except PageNotAnInteger:
+        hist = paginator.page(1)
+    except EmptyPage:
+        hist = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/franchise_request_rejected.html',  {'history': hist, })
+
+@login_required(login_url='/login/')
+def franchise_request_approved(request):
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
+    all_users = FranchiseWithdraw.objects.filter(payment_approved=True).exclude(user__email=request.user.email)
+    print('all users data --',all_users)
+
+    if len(all_users) == 0:
+        return render(request, 'dashboard/franchise_request_approved.html',
+                      {'message': 'you dont have user  record', })
+    users_data = []
+    for req in all_users:
+        name = str(req.user.first_name)+' '+str(req.user.last_name)
+        email = req.user.email
+        country = req.user.country
+        pending = req.payment_pending
+        obj = req
+        # print('users data @@ id  ',users_data,req.id)
+        users_data.append({'name': name, 'email': email, 'country': country.name,'id':req.user.id,'pending':pending})
+    print('all users data --', users_data)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(users_data, 10)
+
+    try:
+        hist = paginator.page(page)
+    except PageNotAnInteger:
+        hist = paginator.page(1)
+    except EmptyPage:
+        hist = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/franchise_request_approved.html',  {'history': hist, })
+
+
+
+@login_required(login_url='/login/')
+def dashboard(request):
+    if (request.user.staff == True and request.user.admin == True and request.user.is_active == True):
+
+        return redirect('admin_dashboard')
+
+    total_transfer_money =0
+
+    all_sendmoney_data = send_money_history.objects.filter(sent_from=request.user)
+
+
+
+
+
+    for req in all_sendmoney_data:
+
+        total_transfer_money += req.sent_amount
+
+
+
     all_withdraw_data = withdraw_requests.objects.filter(user=request.user)
 
+    total_withdraw_amount =0
+    total_deposit_amount = 0
     for req in all_withdraw_data:
         total_withdraw_amount += req.amount
+
     all_deposit_data = deposit_history.objects.filter(user=request.user)
+
+
+
+
 
     for req in all_deposit_data:
         total_deposit_amount += req.amount
+
+
+    obj = FranchiseWithdraw.objects.filter(user = request.user)
+    complete_withdraw = 0
+    pending_withdraw = 0
+    reject_withdraw = 0
+    if(obj.exists()):
+        complete_withdraw = obj.filter(payment_approved=True).count()
+        pending_withdraw = obj.filter(payment_pending=True).count()
+        reject_withdraw = obj.filter(payment_rejected=True).count()
+
+    msg = AllUserNotice.objects.last().notice
+
+    # total_withdraw_amount = 0
+    # total_deposit_amount = 0
+    # all_withdraw_data = withdraw_requests.objects.filter(user=request.user)
+    #
+    # for req in all_withdraw_data:
+    #     total_withdraw_amount += req.amount
+    # all_deposit_data = deposit_history.objects.filter(user=request.user)
+    #
+    # for req in all_deposit_data:
+    #     total_deposit_amount += req.amount
 
 
 
@@ -725,41 +1064,71 @@ def dashboard(request):
                   {'balance': bal, 'active_adpacks': total_active_adpacks, 'total_referal': total_referal,
                    'total_withdraw': total_withdraw_amount,
                    'total_deposit': total_deposit_amount,
-                   'refer_count':refer_count ,'msg':msg})
+                   'refer_count':refer_count ,'msg':msg,
+                   'complete_withdraw':complete_withdraw,
+    'pending_withdraw':pending_withdraw,
+    'reject_withdraw':reject_withdraw,
+                   'total_withdraw_amount':total_withdraw_amount,
+    'total_deposit_amount' :total_deposit_amount,
+                   'total_transfer_money':total_transfer_money
+
+                   })
 
 
 
 @login_required(login_url='/login/')
 def withdraw_request_premium(request):
-	print('in withdraw_request_premium')
-	print("request.method",request.method)
-	if request.method=='GET':
-		amount = 15
-		check=balance.objects.get(user=request.user).current_balance
+    print('in withdraw_request_premium')
+    print("request.method",request.method)
+    if request.method=='GET':
+        amount = 15
+        try:
+            check=balance.objects.get(user=request.user).current_balance
+        except:
+            balance.objects.create(user=request.user)
+            check = balance.objects.get(user=request.user).current_balance
 
-		if amount>check:
-			messages.info(request, 'not enough funds to activate premium plan')
-			# return JsonResponse({'message':'not enough funds to activate premium plan'})
-			return redirect('dashboard')
+        if amount>check:
+            messages.info(request, 'not enough funds to activate premium plan')
+            # return JsonResponse({'message':'not enough funds to activate premium plan'})
+            return redirect('dashboard')
+        try:
+            amount_for_admin = 12
+            obj1 = User.objects.get(admin=True, staff=True, is_active=True)
+            b2 = balance.objects.get(user=obj1)
+            b2.current_balance = (b2.current_balance + amount_for_admin)
+            b2.save()
+            parent_user =request.user.parent
+            b3 = balance.objects.get(user=parent_user)
+            b3.current_balance = (b3.current_balance + 3)
+            b3.save()
 
-		b=balance.objects.get(user=request.user)
-		b.current_balance=(b.current_balance-amount)
-		b.save()
+        except:
+            pass
+        try:
+            b=balance.objects.get(user=request.user)
+            b.current_balance=(b.current_balance-amount)
+            b.save()
+        except:
+            balance.objects.create(user = request.user)
+            b = balance.objects.get(user=request.user)
+            b.current_balance = (b.current_balance - amount)
+            b.save()
 
-		obj = PremiumPlan.objects.filter(user=request.user)
-		if(obj.exists()):
-			obj = obj.first()
-			obj.plan=True
-			obj.save()
-		else:
-			PremiumPlan.objects.create(user=request.user, plan=True)
-		messages.info(request, 'Your premium plan activated successfully')
-		return redirect('dashboard')
+        obj = PremiumPlan.objects.filter(user=request.user)
+        if(obj.exists()):
+            obj = obj.first()
+            obj.plan=True
+            obj.save()
+        else:
+            PremiumPlan.objects.create(user=request.user, plan=True)
+        messages.info(request, 'Your premium plan activated successfully')
+        return redirect('dashboard')
 
-		# return JsonResponse({'message':'Your premium plan activated successfully'})
-	else:
-		messages.info(request, 'Your premium plan not activated ')
-		return redirect('add_premium_plan')
+        # return JsonResponse({'message':'Your premium plan activated successfully'})
+    else:
+        messages.info(request, 'Your premium plan not activated ')
+        return redirect('add_premium_plan')
 
 
 @csrf_exempt
@@ -813,8 +1182,7 @@ def payment_failed(request):
 @login_required
 def add_fund(request):
     exist = check_exist_or_not(request)
-    if (not exist):
-        return redirect('add_premium_plan')
+
 
     if request.session.has_key('order_number'):
         del request.session['order_number']
@@ -838,7 +1206,13 @@ def payment_status(request):
 
         if payee_account == 'U29488895':
             usr = User.objects.get(id=int(user_id))
-            bal = balance.objects.get(user=usr)
+            balance.objects.create(user=request.user)
+            try:
+                bal = balance.objects.get(user=usr)
+            except:
+                balance.objects.create(user=request.user)
+                bal = balance.objects.get(user=usr)
+
             amount_for_admin = round((5 * amount) / 100, 2)
 
             try:
@@ -860,6 +1234,36 @@ def payment_status(request):
     else:
         return HttpResponse('failed')
 
+@login_required(login_url='/login/')
+def admin_balance_transfer(request):
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
+
+
+    if request.method == 'POST':
+        toemail = request.POST['toemail']
+        amount = float(request.POST['amount'])
+        userbalancedata = balance.objects.get(user=request.user)
+        userbalance = userbalancedata.current_balance
+        if amount > userbalance:
+            messages.warning(request, 'dont have enough funds')
+            return redirect('admin_send_money')
+        try:
+            to = balance.objects.get(user__email=toemail)
+            userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount), 2)
+
+            userbalancedata.save()
+            to.current_balance = round(float(to.current_balance + amount), 2)
+            to.save()
+
+            send_money_history.objects.create(sent_from=request.user, sent_to=toemail, sent_amount=amount)
+            messages.success(request, 'balance transfer successfull')
+            return redirect('admin_send_money')
+        except balance.DoesNotExist:
+            messages.info(request, 'user does not exist')
+            return redirect('admin_send_money')
+
 
 @login_required(login_url='/login/')
 def balance_transfer(request):
@@ -879,7 +1283,20 @@ def balance_transfer(request):
             return redirect('send_money')
         try:
             to = balance.objects.get(user__email=toemail)
+
+            amount_for_admin = round((5 * amount) / 100, 2)
+            userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount_for_admin), 2)
+
+            try:
+                obj1 = User.objects.filter(admin=True, staff=True, is_active=True).first()
+                b1 = balance.objects.get(user=obj1)
+                b1.current_balance = (b1.current_balance + amount_for_admin)
+                b1.save()
+
+            except:
+                pass
             userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount), 2)
+
             userbalancedata.save()
             to.current_balance = round(float(to.current_balance + amount), 2)
             to.save()
@@ -1382,8 +1799,7 @@ def franchise_withdraw(request):
                 obj1.save()
             except:
                 pass
-
-            FranchiseWithdraw.objects.create(user = request.user,amount = amount)
+            FranchiseWithdraw.objects.create(user = request.user,amount = amount,payment_pending=True)
             messages.success(request, 'Your withdrawal request is sent to admin successfully')
             return render(request, 'dashboard/franchise_withdraw.html',{'bal':str(bal)})
     else:
@@ -1642,6 +2058,10 @@ def receivedmoney_history(request):
         hist = paginator.page(paginator.num_pages)
 
     return render(request, 'dashboard/received_money_history.html', {'history': hist, 'exist': exist})
+
+def admin_send_money(request):
+
+    return render(request, 'dashboard/admin-send-fund.html',)
 
 
 def send_money(request):

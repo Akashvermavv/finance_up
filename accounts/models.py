@@ -82,6 +82,7 @@ class User(AbstractBaseUser):
     country = CountryField(blank=False, null=False, blank_label='(select country)')
     # active = models.BooleanField(default=True)  # can login
     is_active = models.BooleanField(default=True)  # can login
+    ban = models.BooleanField(default=False)  # can login
     staff = models.BooleanField(default=False)  # staff user non superuser
     admin = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)

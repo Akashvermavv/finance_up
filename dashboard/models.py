@@ -264,12 +264,17 @@ class AllUserNotice(models.Model):
 
 
 class FranchiseWithdraw(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    flag  = models.BooleanField(default=False)
-    amount  = models.BigIntegerField(default=0)
+
+    date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.FloatField()
+    payment_approved = models.BooleanField(default=False)
+    payment_pending = models.BooleanField(default=False)
+    payment_rejected = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.user)
+
 
 
 
