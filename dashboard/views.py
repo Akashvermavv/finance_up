@@ -24,7 +24,48 @@ def test(request):
 	return  render(request,'accounts/activation.html')
 
 
+
+
+
+def dfs_tree(visited, node,html_code,level):
+    if node not in visited and level<4:
+        print (node)
+        if level==1:
+            level_str="first"
+        if level==2:
+            level_str="second"
+        if level==3:
+            level_str="third"
+        url="#"
+
+        if node==None:
+            html_code += """<li class="tree-%s-user">
+                                    <a href="%s">%s</a>""" % (level_str, url, "None")
+            return html_code
+        visited.add(node)
+        left=node.left
+        right=node.right
+        html_code += """<li class="tree-%s-user">
+                        <a href="%s">%s</a> <ul>""" % (level_str, url, node.email)
+
+        html_code=dfs_tree(visited,left,html_code,level+1)
+        html_code += "</li>"
+        html_code=dfs_tree(visited,right,html_code,level+1)
+        html_code += "</li>"
+        html_code+="</ul>"
+    return html_code
+
+
+
+
+
+
+
+
 def all_user_notice(request):
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
     if(request.method=='POST'):
         form = AllUserNoticeForm(request.POST)
         if form.is_valid():
@@ -221,44 +262,44 @@ def add_premium_plan(request):
 #         return redirect('add_premium_plan')
 #     return render(request, 'dashboard/binary_tree.html')
 
-def bfs(visited,queue, node):
-    visited.append(node)
-    queue.append(node)
-    user_dict = {}
-    while queue:
-        parent = queue.pop(0)
-        level=(parent.level)+1
-        if level not in user_dict:
-            user_dict[level]=[]
-        left=parent.left
-        right=parent.right
-        visited.append(parent)
-        if left==None:
-            user_dict[level].append(None)
-        else :
-            user_dict[level ].append(left)
-            queue.append(left)
-        if right==None:
-            user_dict[level].append(None)
-        else:
-            user_dict[level].append(right)
-
-    # level_power=1
-    # for key,value in user_dict.items():
-    #     check=2**level_power
-    #     level_power+=1
-    #     if len(user_dict[key])<check:
-    #         for x in range(check-len(user_dict[key])):
-    #             user_dict[key].append(None)
-    return user_dict
+# def bfs(visited,queue, node):
+#     visited.append(node)
+#     queue.append(node)
+#     user_dict = {}
+#     while queue:
+#         parent = queue.pop(0)
+#         level=(parent.level)+1
+#         if level not in user_dict:
+#             user_dict[level]=[]
+#         left=parent.left
+#         right=parent.right
+#         visited.append(parent)
+#         if left==None:
+#             user_dict[level].append(None)
+#         else :
+#             user_dict[level ].append(left)
+#             queue.append(left)
+#         if right==None:
+#             user_dict[level].append(None)
+#         else:
+#             user_dict[level].append(right)
+#
+#     # level_power=1
+#     # for key,value in user_dict.items():
+#     #     check=2**level_power
+#     #     level_power+=1
+#     #     if len(user_dict[key])<check:
+#     #         for x in range(check-len(user_dict[key])):
+#     #             user_dict[key].append(None)
+#     return user_dict
 
 def binary_tree(request):
     exist = check_exist_or_not(request)
     if (not exist):
         return redirect('add_premium_plan')
-    user_dict = bfs([], [], request.user)
+    html_code = dfs_tree(set(), request.user, "<ul>",1)
 
-    return render(request, 'dashboard/binary_tree.html', {'user_dict': user_dict})
+    return render(request, 'dashboard/binary_tree.html', {'html_code': html_code})
 
 def plans(request,package=None):
 
@@ -1298,7 +1339,7 @@ def balance_transfer(request):
             userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount), 2)
 
             userbalancedata.save()
-            to.current_balance = round(float(to.current_balance + amount), 2)
+            to.current_balance = round(float(to.current_balance + (amount-amount_for_admin)), 2)
             to.save()
 
             send_money_history.objects.create(sent_from=request.user, sent_to=toemail, sent_amount=amount)
@@ -1874,6 +1915,9 @@ def withdraw_request(request):
             b1 = balance.objects.get(user=obj1)
             b1.current_balance = (b1.current_balance + amount_for_admin)
             b1.save()
+            FranchiseWithdraw.objects.create(user=request.user, amount=amount, payment_pending=True)
+            # messages.success(request, 'Your withdrawal request is sent to admin successfully')
+
 
         except:
             pass
@@ -2060,6 +2104,9 @@ def receivedmoney_history(request):
     return render(request, 'dashboard/received_money_history.html', {'history': hist, 'exist': exist})
 
 def admin_send_money(request):
+    if (not (request.user.staff == True and request.user.admin == True and request.user.is_active == True)):
+        messages.error(request, 'You have not  admin access')
+        return render(request, 'accounts/login.html', )
 
     return render(request, 'dashboard/admin-send-fund.html',)
 
