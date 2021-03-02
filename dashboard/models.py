@@ -268,6 +268,7 @@ class FranchiseWithdraw(models.Model):
     date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.FloatField()
+    payment_method = models.CharField(max_length=50,default=None,null=True,blank=True)
     payment_approved = models.BooleanField(default=False)
     payment_pending = models.BooleanField(default=False)
     payment_rejected = models.BooleanField(default=False)

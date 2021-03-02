@@ -857,8 +857,10 @@ def franchise_request(request):
         country = req.user.country
         pending = req.payment_pending
         obj = req
+        amount = req.amount
+        payment_method = req.payment_method
         # print('users data @@ id  ',users_data,req.id)
-        users_data.append({'name': name, 'email': email, 'country': country.name,'id':req.id,'pending':pending})
+        users_data.append({'name': name, 'email': email,'amount':amount,'payment_method':payment_method, 'country': country.name,'id':req.id,'pending':pending})
     print('all users data --', users_data)
 
     page = request.GET.get('page', 1)
@@ -917,7 +919,7 @@ def franchise_request_approved(request):
 
     if len(all_users) == 0:
         return render(request, 'dashboard/franchise_request_approved.html',
-                      {'message': 'you dont have user  record', })
+                      {'message': 'you dont have any approved record', })
     users_data = []
     for req in all_users:
         name = str(req.user.first_name)+' '+str(req.user.last_name)
@@ -1312,28 +1314,23 @@ def balance_transfer(request):
     if (not exist):
         return redirect('add_premium_plan')
 
-
-
     if request.method == 'POST':
         toemail = request.POST['toemail']
         amount = float(request.POST['amount'])
         userbalancedata = balance.objects.get(user=request.user)
         userbalance = userbalancedata.current_balance
-        if amount > userbalance:
+        if amount > userbalance :
             messages.warning(request, 'dont have enough funds')
             return redirect('send_money')
         try:
             to = balance.objects.get(user__email=toemail)
-
             amount_for_admin = round((5 * amount) / 100, 2)
             userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount_for_admin), 2)
-
             try:
                 obj1 = User.objects.filter(admin=True, staff=True, is_active=True).first()
                 b1 = balance.objects.get(user=obj1)
                 b1.current_balance = (b1.current_balance + amount_for_admin)
                 b1.save()
-
             except:
                 pass
             userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount), 2)
@@ -1804,7 +1801,14 @@ def withdraw(request):
     if (not exist):
         return redirect('add_premium_plan')
     if request.method == 'GET':
-        return render(request, 'dashboard/withdraw.html')
+        try:
+            obj = balance.objects.get(user=request.user)
+            bal = obj.current_balance
+
+            print('bal in try is --', bal)
+        except:
+            bal = 0
+        return render(request, 'dashboard/withdraw.html',{'bal':bal})
 
 
 @login_required(login_url='/login/')
@@ -1915,7 +1919,7 @@ def withdraw_request(request):
             b1 = balance.objects.get(user=obj1)
             b1.current_balance = (b1.current_balance + amount_for_admin)
             b1.save()
-            FranchiseWithdraw.objects.create(user=request.user, amount=amount, payment_pending=True)
+            FranchiseWithdraw.objects.create(user=request.user, amount=amount, payment_pending=True,payment_method=str_method)
             # messages.success(request, 'Your withdrawal request is sent to admin successfully')
 
 

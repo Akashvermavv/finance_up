@@ -26,16 +26,16 @@ DEFAULT_ACTIVATION_DAYS = getattr(settings,'DEFAULT_ACTIVATION_DAYS',7)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self,email,full_name=None,password=None,is_active=True,is_staff=False,is_admin=False):
-        if not email:
-            raise ValueError("Users must have an email address")
+    def create_user(self,username,full_name=None,password=None,is_active=True,is_staff=False,is_admin=False):
+        if not username:
+            raise ValueError("Users must have an username ")
         if not password:
             raise ValueError("Users must have a password")
         # if not full_name:
         #     raise ValueError("Users must have a fullname")
 
         user_obj = self.model(
-            email = self.normalize_email(email),
+            username = username,
             full_name = full_name
         )
         user_obj.set_password(password)    # change user password
@@ -45,18 +45,18 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
-    def create_staffuser(self,email,full_name=None,password =None):
+    def create_staffuser(self,username,full_name=None,password =None):
         user = self.create_user(
-                            email,
+                            username,
                             full_name=full_name,
                             password =password,
                             is_staff=True
                         )
         return user
 
-    def create_superuser(self,email,full_name=None,password =None):
+    def create_superuser(self,username,full_name=None,password =None):
         user = self.create_user(
-                            email,
+                            username,
                             full_name=full_name,
                             password =password,
                             is_staff=True,
@@ -70,6 +70,7 @@ choice=(('left','Left'),
 class User(AbstractBaseUser):
     first_name = models.CharField(max_length=25, blank=False, null=False)
     last_name = models.CharField(max_length=25, blank=False, null=False)
+    username = models.CharField(max_length=25,blank=False,null=False,unique=True)
     position = models.CharField(max_length=25, choices=choice, default='left', )
     email = models.EmailField(max_length=255, unique=True)
     referral_id = models.IntegerField(default=0, null=True, blank=True)
@@ -96,7 +97,7 @@ class User(AbstractBaseUser):
     # confirm = models.BooleanField(default=False)
     # confirmed_date = models.DateTimeField(auto_now_add=True)
 
-    USERNAME_FIELD  = 'email'  # username
+    USERNAME_FIELD  = 'username'  # username
     # USERNAME_FIELD AND password are required by default
     # REQUIRED_FIELDS = ['full_name']   # ['full_name']
     REQUIRED_FIELDS = []   # ['full_name']
@@ -104,7 +105,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def get_full_name(self):
         if self.full_name:

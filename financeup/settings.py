@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.User'   # changes the built-in user model to ours
+AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

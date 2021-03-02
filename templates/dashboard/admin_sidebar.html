@@ -209,6 +209,23 @@
                                         <span class="">Notice</span>
                                     </a>
                                 </li>
+                                 {% if user.is_admin %}
+                                <li class="pcoded-hasmenu">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="feather icon-unlock"></i></span>
+                                        <span class="pcoded-mtext">Give Matching bonus</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu" style="background-color: #0D1F48!important;">
+                                        <li class=" ">
+                                            <a href="{% url 'dfs_matching' %}">
+                                                <span class="pcoded-mtext">Give matching Bonus to all parents</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                {% endif %}
 
 
 
