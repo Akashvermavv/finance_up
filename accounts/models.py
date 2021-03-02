@@ -73,8 +73,8 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=25,blank=False,null=False,unique=True)
     position = models.CharField(max_length=25, choices=choice, default='left', )
     email = models.EmailField(max_length=255, unique=True)
-    referral_id = models.IntegerField(default=0, null=True, blank=True)
-    placement_id = models.IntegerField(default=0, null=True, blank=True)
+    referral_id = models.CharField(max_length=25,blank=False,null=False)
+    placement_id = models.CharField(max_length=25,blank=False,null=False)
 
     user_id = models.IntegerField(default=0, unique=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
