@@ -1,4 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
+from django.http import Http404,HttpResponse,JsonResponse
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
@@ -1307,6 +1308,27 @@ def admin_balance_transfer(request):
             messages.info(request, 'user does not exist')
             return redirect('admin_send_money')
 
+@csrf_exempt
+def cal_charge(request):
+    if request.method == 'POST':
+        # print('request post --', request.POST)
+        # print('request body --', request.body)
+        if request.is_ajax():
+            data = request.POST
+            # print('request post --',request.POST)
+            # print('request body --',request.body)
+            data = request.POST
+
+            toemail = data['toemail']
+            amount = float(data['amount'])
+            userbalancedata = balance.objects.get(user=request.user)
+            userbalance = userbalancedata.current_balance
+            amount_for_admin = round((5 * amount) / 100, 2)
+
+            if amount_for_admin:
+                return JsonResponse({'is_valid': True,'amount':amount_for_admin+amount,'amount_for_admin':amount_for_admin,'toemail':toemail})
+            return JsonResponse({'is_valid': False})
+        raise Http404
 
 @login_required(login_url='/login/')
 def balance_transfer(request):
@@ -1317,6 +1339,9 @@ def balance_transfer(request):
     if request.method == 'POST':
         toemail = request.POST['toemail']
         amount = float(request.POST['amount'])
+        amount_for_admin = float(request.POST['amount_for_admin'])
+        # print('amount $$%% is ',amount)
+        # print('amount_for_admin $$%% is ',amount_for_admin)
         userbalancedata = balance.objects.get(user=request.user)
         userbalance = userbalancedata.current_balance
         if amount > userbalance :
@@ -1324,8 +1349,8 @@ def balance_transfer(request):
             return redirect('send_money')
         try:
             to = balance.objects.get(user__email=toemail)
-            amount_for_admin = round((5 * amount) / 100, 2)
-            userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount_for_admin), 2)
+            # amount_for_admin = round((5 * amount) / 100, 2)
+            # userbalancedata.current_balance = round(float(userbalancedata.current_balance - amount_for_admin), 2)
             try:
                 obj1 = User.objects.filter(admin=True, staff=True, is_active=True).first()
                 b1 = balance.objects.get(user=obj1)

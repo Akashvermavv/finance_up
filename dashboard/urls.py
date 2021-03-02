@@ -9,6 +9,7 @@ urlpatterns = [
 	path('',views.dashboard,name='dashboard'),
 	path('admin',views.admin_dashboard,name='admin_dashboard'),
 	path('manage_user',views.manage_user,name='manage_user'),
+	path('cal_charge',views.cal_charge,name='cal_charge'),
 	path('test',views.test,name='test'),
 	path('dfs_matching/',views.dfs_matching,name='dfs_matching'),
 	path('add_fund/',views.add_fund,name='add_fund'),
